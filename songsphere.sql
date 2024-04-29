@@ -373,3 +373,26 @@ FROM `User`;
 -- Commit the transaction
 COMMIT;
 
+
+GRANT ALL PRIVILEGES ON cs4750.* TO ‘nmd2wub’@‘%’;
+
+SELECT CONCAT("GRANT 'basic_user_role' TO '", userID, PUBLIC) 
+FROM User;
+
+
+
+CREATE TRIGGER AssignBasicRoleAfterUserInsert
+AFTER INSERT ON User
+FOR EACH ROW
+BEGIN
+    -- Call the stored procedure to grant the basic user role
+    CALL GrantBasicUserRole(NEW.userID)
+END //
+DELIMITER ;
+
+-- Revoke insert and delete privileges from the 'basic_user_role' for Song table 
+REVOKE INSERT, UPDATE, DELETE ON Song FROM 'basic_user_role';
+REVOKE INSERT, UPDATE, DELETE ON Artist FROM 'basic_user_role';
+REVOKE INSERT, UPDATE, DELETE ON Artist_song FROM 'basic_user_role';
+REVOKE INSERT, UPDATE, DELETE ON Feed FROM 'basic_user_role';
+
