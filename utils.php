@@ -133,6 +133,24 @@ function getAllSongs() {
     }
 }
 
+function getAllReviews() {
+    global $db;
+
+    try {
+        $query = "SELECT * FROM Review";
+        $statement = $db->prepare($query);
+        $statement->execute();
+        $reviews = $statement->fetchAll();
+    } catch (PDOException $e) {
+        echo "Error getting all reviews: " . $e->getMessage();
+    } finally {
+        if (isset($statement)) {
+            $statement->closeCursor();
+            return $reviews;
+        }
+    }
+}
+
 function searchSongsByTitle($title) {
     global $db;
 
