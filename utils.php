@@ -20,9 +20,7 @@ function addSong($songTitle, $genre, $releaseYear) {
     }
 }
 
-
 function updateSong($songID, $songTitle, $genre, $releaseYear) {
-
     global $db;
 
     try {
@@ -43,7 +41,6 @@ function updateSong($songID, $songTitle, $genre, $releaseYear) {
 }
 
 function deleteSong($songID) {
-
     global $db;
 
     try {
@@ -60,13 +57,13 @@ function deleteSong($songID) {
     }
 }
 
-function addFavoriteSong($userID, $songID) {
+function addFavoriteSong($email, $songID) {
     global $db;
 
     try {
-        $query = "INSERT INTO User_Favorites_Song (userID, songID) VALUES (:userID, :songID)";
+        $query = "INSERT INTO User_Favorites_Song (email, songID) VALUES (:email, :songID)";
         $statement = $db->prepare($query);
-        $statement->bindValue(':userID', $userID);
+        $statement->bindValue(':email', $email);
         $statement->bindValue(':songID', $songID);
         $statement->execute();
     } catch (PDOException $e) {
@@ -78,12 +75,13 @@ function addFavoriteSong($userID, $songID) {
     }
 }
 
-function removeFavoriteSong($userID, $songID) {
+function removeFavoriteSong($email, $songID) {
+    global $db;
 
     try {
-        $query = "DELETE FROM User_Favorites_Song WHERE userID = :userID AND songID = :songID";
+        $query = "DELETE FROM User_Favorites_Song WHERE email = :email AND songID = :songID";
         $statement = $db->prepare($query);
-        $statement->bindValue(':userID', $userID);
+        $statement->bindValue(':email', $email);
         $statement->bindValue(':songID', $songID);
         $statement->execute();
     } catch (PDOException $e) {
@@ -95,16 +93,16 @@ function removeFavoriteSong($userID, $songID) {
     }
 }
 
-function addReview($title, $description, $rating, $userID) {
+function addReview($title, $description, $rating, $email) {
     global $db;
 
     try {
-        $query = "INSERT INTO Review (title, description, rating, userID) VALUES (:title, :description, :rating, :userID)";
+        $query = "INSERT INTO Review (title, description, rating, email) VALUES (:title, :description, :rating, :email)";
         $statement = $db->prepare($query);
         $statement->bindValue(':title', $title);
         $statement->bindValue(':description', $description);
         $statement->bindValue(':rating', $rating);
-        $statement->bindValue(':userID', $userID);
+        $statement->bindValue(':email', $email);
         $statement->execute();
     } catch (PDOException $e) {
         echo "Error adding review: " . $e->getMessage();
