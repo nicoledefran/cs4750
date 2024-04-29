@@ -17,6 +17,11 @@ CREATE TABLE `User` (
 `lastName` VARCHAR(255)
 );
 
+CREATE TABLE 'Account'(
+    'email' PRIMARY KEY VARCHAR(255),
+     'password' VARCHAR(255)
+)
+
 INSERT INTO `User` VALUES
 (1, 'Kaitlyn', 'Wee'),
 (2, 'Jordan', 'Burton'),
