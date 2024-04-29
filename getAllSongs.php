@@ -3,8 +3,8 @@ include 'utils.php';
 
 $songs = getAllSongs();
 
-// You can include this PHP script within a page that displays songs
-// For example, a loop in your HTML to list all songs
+// include this PHP script within a page that displays songs
+// we can loop in HTML to list all songs
 foreach ($songs as $song) {
     echo "<div>";
     echo "<h4>" . htmlspecialchars($song['songTitle']) . "</h4>";
