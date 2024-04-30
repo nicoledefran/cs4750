@@ -14,13 +14,15 @@ USE music_platform;
 CREATE TABLE `User` (
 `userID` INT AUTO_INCREMENT PRIMARY KEY,
 `firstName` VARCHAR(255),
-`lastName` VARCHAR(255)
+`lastName` VARCHAR(255), 
+'email' VARCHAR(255), 
+'password' VARCHAR(255) 
 );
 
-CREATE TABLE 'Account'(
-    'email' PRIMARY KEY VARCHAR(255),
-     'password' VARCHAR(255)
-)
+-- CREATE TABLE 'Account'(
+--     'email' PRIMARY KEY VARCHAR(255),
+--      'password' VARCHAR(255)
+-- )
 
 INSERT INTO `User` VALUES
 (1, 'Kaitlyn', 'Wee'),
@@ -378,26 +380,22 @@ FROM `User`;
 -- Commit the transaction
 COMMIT;
 
+USE music_platform; 
+CREATE ROLE IF NOT EXISTS `admin_user_role`;  
 
-GRANT ALL PRIVILEGES ON cs4750.* TO ‘nmd2wub’@‘%’;
+GRANT UPDATE, DELETE, SELECT ON music_platform.User TO 'admin_user_role';  
+GRANT UPDATE, DELETE, SELECT ON music_platform.Artist TO 'admin_user_role';  
+GRANT UPDATE, DELETE, SELECT ON music_platform.Artist_Song TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.Feed TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.Profile TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.Review TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.Review_Posts_To_Feed TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.Song TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.User_Creates_Review TO 'admin_user_role';
+GRANT UPDATE, DELETE, SELECT ON music_platform.User_Favorites_Song TO 'admin_user_role';
 
-SELECT CONCAT("GRANT 'basic_user_role' TO '", userID, PUBLIC) 
-FROM User;
 
+CREATE USER (http://localhost/phpmyadmin/url.php?url=https://dev.mysql.com/doc/refman/8.0/en/information-functions.html%23function_user) 'music_platform_admin'@'%' IDENTIFIED VIA mysql_native_password USING '***';GRANT USAGE ON *.* TO 'music_platform_admin'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HO
+UR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `music\_platform`.* TO 'music_platform_admin'@'%'
 
-
-CREATE TRIGGER AssignBasicRoleAfterUserInsert
-AFTER INSERT ON User
-FOR EACH ROW
-BEGIN
-    -- Call the stored procedure to grant the basic user role
-    CALL GrantBasicUserRole(NEW.userID)
-END //
-DELIMITER ;
-
--- Revoke insert and delete privileges from the 'basic_user_role' for Song table 
-REVOKE INSERT, UPDATE, DELETE ON Song FROM 'basic_user_role';
-REVOKE INSERT, UPDATE, DELETE ON Artist FROM 'basic_user_role';
-REVOKE INSERT, UPDATE, DELETE ON Artist_song FROM 'basic_user_role';
-REVOKE INSERT, UPDATE, DELETE ON Feed FROM 'basic_user_role';
-
+GRANT 'admin_user_role' TO 'music_platform_admin'@'%'; 
